@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>简单的js数据双向绑定</title>
+</head>
+<body>
+	<input type="text" v-model="data" />
+	<p id="p"></p>
+<script>
+    var obj={};
+    var inputVal=document.querySelector("[v-model=data]");
+    obj.pv="";
+    function Vue(data){
+        this.data=data;
+        for(var key in this.data){
+    		var val=this.data[key];
+    		if(typeof val === "object"){
+                new Observe(val);
+    		}else{
+    			this.convit(val,key);
+    		}
+    	}
+    }
+    Vue.prototype.convit=function(val,key){
+    	Object.defineProperty(this.data,key,{
+    		enumerable:true,
+    		configurable:true,
+    		get:function(val){
+    		},
+    		set:function(newVal){
+                document.getElementById("p").innerHTML=newVal;
+    		} 
+    	})
+    }
+    var test=new Vue(obj);
+    inputVal.addEventListener("input",function(e){
+    	obj.pv=e.target.value;
+    })
+</script>
+</body>
+</html>
